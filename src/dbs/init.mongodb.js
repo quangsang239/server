@@ -2,9 +2,10 @@
 
 const mongoose = require("mongoose");
 const { countConnect, checkOverload } = require("../helpers/check.connect");
-
-const connectString =
-  "mongodb+srv://qangsang239:UOsGeIIzJGzMw8XG@ec-project.9l6cp7m.mongodb.net/";
+const {
+  db: { host, port, name },
+} = require("../configs/config.mongodb");
+const connectString = `${host}${name}${port}`;
 
 class Database {
   constructor() {
