@@ -13,17 +13,17 @@ const countConnect = () => {
 
 // check overload connections
 const checkOverload = () => {
-  setInterval(() => {
-    const numConnect = mongoose.connections.length;
-    const numCore = os.cpus().length;
-    const memoryUsage = process.memoryUsage().rss;
-    console.log(`Memory usage: ${memoryUsage / 1024 / 1024} MB`);
-    console.log(`Active connections: ${numConnect}`);
-    const maxConnect = numCore * 5;
-    if (numConnect > maxConnect) {
-      console.log("Overload connections");
-    }
-  }, _SECONDS);
+  // setInterval(() => {
+  //   const numConnect = mongoose.connections.length;
+  //   const numCore = os.cpus().length;
+  //   const memoryUsage = process.memoryUsage().rss;
+  //   console.log(`Memory usage: ${memoryUsage / 1024 / 1024} MB`);
+  //   console.log(`Active connections: ${numConnect}`);
+  //   const maxConnect = numCore * 5;
+  //   if (numConnect > maxConnect) {
+  //     console.log("Overload connections");
+  //   }
+  // }, _SECONDS);
 };
 
 module.exports = {

@@ -2,13 +2,11 @@
 
 const shopModel = require("../models/shop.model");
 const bcrypt = require("bcrypt");
-
-const RoleShop = {
-  SHOP: "SHOP",
-  WRITER: "WRITER",
-  EDITOR: "EDITOR",
-  ADMIN: "ADMIN",
-};
+const KeyTokenService = require("./keyToken.service");
+const { createTokenPair } = require("../auth/authUtils");
+const { RoleShop } = require("../constants/access");
+const { getIntoData } = require("../utils/index");
+const crypto = require("crypto");
 
 class AccessService {
   static signup = async ({ name, email, password }) => {
@@ -31,7 +29,38 @@ class AccessService {
 
       if (newShop) {
         // create private key, public key
+        const privateKey = crypto.randomBytes(64).toString("hex");
+        const publicKey = crypto.randomBytes(64).toString("hex");
+
+        const keyStore = await KeyTokenService.createKeyToken({
+          userId: newShop._id,
+          publicKey,
+          privateKey,
+        });
+
+        if (!keyStore) {
+          return {
+            code: "xxxx",
+            message: "publicKeyString error",
+          };
+        }
+        // create token pair
+        const tokens = await createTokenPair({ userId: newShop._id, email }, publicKey, privateKey);
+
+        console.log({ tokens });
+
+        return {
+          code: 201,
+          metadata: {
+            shop: getIntoData({ fields: ["_id", "name", "email"], object: newShop }),
+            tokens,
+          },
+        };
       }
+      return {
+        code: 200,
+        metadata: null,
+      };
     } catch (error) {
       return {
         code: "xxx",
@@ -41,3 +70,5 @@ class AccessService {
     }
   };
 }
+
+module.exports = AccessService;
