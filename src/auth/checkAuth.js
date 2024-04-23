@@ -6,7 +6,6 @@ const { findById } = require("../services/apiKey.service");
 const apiKey = async (req, res, next) => {
   const key = req.headers[HEADER.API_KEY]?.toString();
   if (!key) {
-    console.log("key not found");
     return res.status(403).json({
       code: "403",
       message: "Forbidden",
@@ -35,7 +34,6 @@ const permission = (permission) => {
         message: "permission denied",
       });
     }
-    console.log("check permission", req.objKey.permissions);
     const validPermission = req.objKey.permissions.includes(permission);
     if (!validPermission) {
       return res

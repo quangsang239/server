@@ -6,7 +6,6 @@ const findByEmail = async ({
   select = { email: 1, password: 2, name: 1, status: 1, roles: 1 },
 }) => {
   const shop = await ShopModel.findOne({ email }).select(select).lean();
-  console.log({ shopasdsad: shop });
   return shop;
 };
 

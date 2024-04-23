@@ -17,7 +17,6 @@ const { findByEmail } = require("./shop.service");
 class AccessService {
   // handle refresher token
   static refreshTokenV2 = async ({ refreshToken, user, keyStore }) => {
-    console.log("1111111111111111111111", { refreshToken, user, keyStore });
     const { userId, email } = user;
     if (keyStore.refreshTokensUsed.includes(refreshToken)) {
       await KeyTokenService.deleteKeyById(userId);
@@ -58,7 +57,6 @@ class AccessService {
         refreshToken,
         foundToken.privateKey
       );
-      console.log({ userId, email });
       // delete key
       await KeyTokenService.deleteKeyById(userId);
       throw new ForbiddenError("Something wrong happend !! please relogin");
@@ -143,7 +141,6 @@ class AccessService {
     // step1: check email exits
     const holderShop = await shopModel.findOne({ email }).lean();
     if (holderShop) {
-      console.log("email is exits");
       throw new BadRequestError("Error: shop already register");
     }
     const passwordHash = await bcrypt.hash(password, 10);
@@ -177,8 +174,6 @@ class AccessService {
         publicKey,
         privateKey
       );
-
-      console.log({ tokens });
 
       return {
         code: 201,

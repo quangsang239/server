@@ -15,7 +15,6 @@ const createTokenPair = async (payload, publicKey, privateKey) => {
   const refreshToken = await JWT.sign(payload, privateKey, {
     expiresIn: "7 days",
   });
-  console.log({ accessToken, refreshToken });
   return { accessToken, refreshToken };
 };
 
@@ -30,22 +29,18 @@ const authentication = asyncHandler(async (req, res, next) => {
   */
 
   const userId = req.headers[HEADER.CLIENT_ID];
-  console.log({ userId });
   if (!userId) throw new AuthFailureError("Invalid value");
   // 2. get token
   const keyStore = await findByUserId(userId);
-  console.log({ keyStore });
   if (!keyStore) throw new NotFoundError("Not found value");
 
   // 3. verify token
   const accessToken = req.headers[HEADER.AUTHORIZATION];
-  console.log({ accessToken });
   if (!accessToken) throw new AuthFailureError("Invalid value");
 
   // 4. check user in database
   try {
     const decodeUser = JWT.verify(accessToken, keyStore.publicKey);
-    console.log({ decodeUser });
     if (userId !== decodeUser.userId)
       throw new AuthFailureError("Invalid value");
     req.keyStore = keyStore;
@@ -65,11 +60,9 @@ const authenticationV2 = asyncHandler(async (req, res, next) => {
   */
 
   const userId = req.headers[HEADER.CLIENT_ID];
-  console.log({ userId });
   if (!userId) throw new AuthFailureError("Invalid value");
   // 2. get token
   const keyStore = await findByUserId(userId);
-  console.log({ keyStore });
   if (!keyStore) throw new NotFoundError("Not found value");
 
   // 3. verify token
@@ -77,30 +70,22 @@ const authenticationV2 = asyncHandler(async (req, res, next) => {
     try {
       const refreshToken = req.headers[HEADER.REFRESH_TOKEN];
       const decodeUser = JWT.verify(refreshToken, keyStore.privateKey);
-      console.log({ decodeUser });
       if (userId !== decodeUser.userId)
         throw new AuthFailureError("Invalid value");
       req.keyStore = keyStore;
       req.user = decodeUser;
       req.refreshToken = refreshToken;
-      console.log("22222222222222222222222", {
-        keyStore,
-        decodeUser,
-        refreshToken,
-      });
       return next();
     } catch (error) {
       throw error;
     }
   }
   const accessToken = req.headers[HEADER.AUTHORIZATION];
-  console.log({ accessToken });
   if (!accessToken) throw new AuthFailureError("Invalid value");
 
   // 4. check user in database
   try {
     const decodeUser = JWT.verify(accessToken, keyStore.publicKey);
-    console.log({ decodeUser });
     if (userId !== decodeUser.userId)
       throw new AuthFailureError("Invalid value");
     req.keyStore = keyStore;

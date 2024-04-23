@@ -11,7 +11,6 @@ class KeyTokenService {
     privateKey,
     refreshToken,
   }) => {
-    console.log({ userId, publicKey, privateKey, refreshToken });
     const filter = { user: userId },
       update = { publicKey, privateKey, refreshTokensUsed: [], refreshToken },
       options = { upsert: true, new: true };
