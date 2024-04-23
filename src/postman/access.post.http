@@ -1,12 +1,13 @@
-@url_dev=http://localhost:3055/v1/api/
+@url_dev=http://localhost:3055/v1/api
 
 ### signup
 
 POST {{url_dev}}/shop/signup
 Content-Type: application/json
+x-api-key: 3cdddb8ab39604ad460b72c3a4e6d60817ed3af3d84ae9ef0514aa3911cb5a342cff9718b0fc4888aa2f26c1b4a3c20207d31b8b7fcce3f98f13d0d10317a12b
 
 {
   "name": "shop sang",
-  "email": "sangtq2@runsystem.net",
+  "email": "sangtq5@runsystem.net",
   "password": "abc123"
 }

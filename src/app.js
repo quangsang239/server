@@ -25,4 +25,25 @@ app.use("", require("./routers"));
 
 // init error handler
 
+app.use((req, res, next) => {
+  console.log("error server default");
+  const error = new Error("Not found");
+  error.status = 404;
+  next(error);
+});
+
+app.use((error, req, res, next) => {
+  console.log("error server with message");
+  console.log(error.status);
+  const statusCode = error.status || 500;
+  res.status(statusCode);
+  res.json({
+    error: {
+      status: "error",
+      message: error.message || "Internal Server Error",
+      code: statusCode,
+    },
+  });
+});
+
 module.exports = app;
